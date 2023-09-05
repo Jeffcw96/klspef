@@ -1,3 +1,4 @@
+const axios = require("axios");
 const Koa = require("koa");
 const app = new Koa();
 
@@ -10,7 +11,7 @@ app.use(async (ctx) => {
     ctx.status = 200;
     ctx.body = "OK";
   } else {
-    const result = await fetch(url);
+    const result = await axios.get(url);
     ctx.body = JSON.stringify(result);
     ctx.status = 500;
   }
