@@ -10,8 +10,8 @@ app.use(bodyParser({ enableTypes: ["json", "text"] }));
 app.use(async (ctx) => {
   if (ctx.path === "/health") {
     ctx.status = 200;
-    console.log("request body", ctx.request.body);
-    logger.info("hello world", ctx.request.body);
+    console.log("request body", JSON.stringify(ctx.request.body));
+    logger.info("hello world", JSON.stringify(ctx.request.body));
     ctx.body = ctx.request.body || "Not body found";
   }
 });
