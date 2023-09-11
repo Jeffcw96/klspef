@@ -6,11 +6,9 @@ const app = new Koa();
 app.use(bodyParser({ enableTypes: ["json", "text"] }));
 
 app.use(async (ctx) => {
-  const username = process.env.USERNAME;
-  const password = process.env.PASSWORD;
-
   if (ctx.path === "/health") {
     ctx.status = 200;
+    console.log("request body", ctx.request.body);
     ctx.body = ctx.request.body || "Not body found";
   }
 });
