@@ -33,6 +33,11 @@ const LOCATION_ID: Record<LOCATION, number> = {
   SEMARAK: 75,
 };
 
+const ids = Object.values(LOCATION_ID);
+for (const id of ids) {
+  const url = `https://appsys.dbkl.gov.my/mytempahan_baru/gateway.asp?actiontype=gettimetable&dateplay=09%2F28%2F2023&actvid=1&locid=${id}`;
+}
+
 /**
  * Note: The Time id will be same per location, for example: time id in 6-8pm for court 1 and 2 will be the same
  */
