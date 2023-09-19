@@ -9,6 +9,7 @@
 
 # The index of 2 arrays below is matched accordingly
 LOCATION_ID=(4 17 19 57 62 75)
+# LOCATION_ID=(4 17 19 57 62 75)
 LOCATION_LABEL=("IBU_KOTA" "PUSAT_KOMUNITI_GOMBAK" "TAMAN_MELATI_IMPIAN" "DESA_REJANG" "AIR_PANAS" "SEMARAK")
 klspecResponse=()
 
@@ -36,18 +37,20 @@ encodedMaxDate="${maxDay//\//%2F}"
 for ((i = 0; i < ${#LOCATION_ID[@]}; i++)); do
   id="${LOCATION_ID[i]}"
   label="${LOCATION_LABEL[i]}"
+  sleep 1
   timeTableResponse=$(curl "https://appsys.dbkl.gov.my/mytempahan_baru/gateway.asp?actiontype=gettimetable&dateplay=${encodedMaxDate}&actvid=1&locid=${LOCATION_ID[i]}")
-  processedResponse="${timeTableResponse:1:${#timeTableResponse}-2}"
-  
+  processedResponse="${timeTableResponse:2:${#timeTableResponse}-3}"
   # Figure out why it only store the last element
-  klspecResponse["${label}"]="$processedResponse"
+  klspecResponse+="$processedResponse,"
 done
-jsonString=$(echo "$klspecResponse" | node -e "console.log(JSON.stringify(JSON.parse(require('fs').readFileSync('/dev/stdin', 'utf8'))));")
+
 if [ -n "klspecResponse" ]; then
+# Refer https://jqlang.github.io/jq/download/ to install JQ
+json_data=$(jq -n --arg klspecResponse "$klspecResponse" '{"message": $klspecResponse}')
   # Send a POST request to the specified endpoint with the response as the request body
 curl -X POST 'http://localhost:3000/timetable' \
   -H 'Content-Type: application/json' \
-  -d "$jsonString"
+  -d "$json_data"
 else
   echo "The response variable is empty. Cannot send a POST request."
 fi

@@ -12,3 +12,7 @@
 - Handle the parse the response from CRON JOB KLSPEF service
   - [] Filter and map the response into recognizable wording
   - [] Trigger notification to whatsapp
+
+## Prerequisite systems installed
+
+- [JQ](https://jqlang.github.io/jq/download/)
