@@ -5,7 +5,9 @@ import { router } from "./routes";
 
 const app = new Koa();
 console.log("halo");
-app.use(bodyParser({ enableTypes: ["json", "text"] }));
+app.use(
+  bodyParser({ formLimit: "10mb", jsonLimit: "10mb", textLimit: "10mb" })
+);
 app.use(koaPinoLogger());
 app.use(router.routes());
 

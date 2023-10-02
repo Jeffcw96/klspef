@@ -8,7 +8,7 @@
 
 
 # The index of 2 arrays below is matched accordingly
-LOCATION_ID=(4 17 19 57 62 75)
+LOCATION_ID=(4 17)
 # LOCATION_ID=(4 17 19 57 62 75)
 LOCATION_LABEL=("IBU_KOTA" "PUSAT_KOMUNITI_GOMBAK" "TAMAN_MELATI_IMPIAN" "DESA_REJANG" "AIR_PANAS" "SEMARAK")
 klspecResponse=()
@@ -46,7 +46,9 @@ done
 
 if [ -n "klspecResponse" ]; then
 # Refer https://jqlang.github.io/jq/download/ to install JQ
-json_data=$(jq -n --arg klspecResponse "$klspecResponse" '{"message": $klspecResponse}')
+cleanedResponse=$(echo "$klspecResponse" | tr -d '\r\n')
+cleanedResponse=$(echo "$cleanedResponse" | tr -s ' ')
+json_data=$(jq -n -c --arg cleanedResponse "$cleanedResponse" '{"message": $cleanedResponse}')
   # Send a POST request to the specified endpoint with the response as the request body
 curl -X POST 'http://localhost:3000/timetable' \
   -H 'Content-Type: application/json' \
