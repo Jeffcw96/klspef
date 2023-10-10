@@ -1,4 +1,4 @@
-type LOCATION =
+export type LOCATION =
   | "IBU_KOTA"
   | "PUSAT_KOMUNITI_GOMBAK"
   | "TAMAN_MELATI_IMPIAN"
@@ -46,16 +46,16 @@ const LOCATIONS: readonly LOCATION[] = [
 ] as const;
 
 // Get the location id, 6-8pm ids
-const LOCATION_ID: Record<LOCATION, number> = {
-  IBU_KOTA: 4,
-  PUSAT_KOMUNITI_GOMBAK: 17,
-  TAMAN_MELATI_IMPIAN: 19,
-  DESA_REJANG: 57,
-  AIR_PANAS: 62,
-  SEMARAK: 75,
+export const LOCATION_IDS: Record<number, LOCATION> = {
+  4: "IBU_KOTA",
+  17: "PUSAT_KOMUNITI_GOMBAK",
+  19: "TAMAN_MELATI_IMPIAN",
+  57: "DESA_REJANG",
+  62: "AIR_PANAS",
+  75: "SEMARAK",
 };
 
-const ids = Object.values(LOCATION_ID);
+const ids = Object.values(LOCATION_IDS);
 for (const id of ids) {
   const url = `https://appsys.dbkl.gov.my/mytempahan_baru/gateway.asp?actiontype=gettimetable&dateplay=09%2F28%2F2023&actvid=1&locid=${id}`;
 }
@@ -65,7 +65,7 @@ for (const id of ids) {
  */
 
 // These variable stores all 6-8pm time id per location
-const TIME_ID: Record<LOCATION, number> = {
+export const TIME_IDS: Record<LOCATION, number> = {
   IBU_KOTA: 97,
   PUSAT_KOMUNITI_GOMBAK: 626,
   TAMAN_MELATI_IMPIAN: 652,
@@ -75,7 +75,7 @@ const TIME_ID: Record<LOCATION, number> = {
 };
 
 // This object store all court id from court 1 to 3
-const TIME_TABLE_ID: TimeTableId = {
+export const TIME_TABLE_IDS: TimeTableId = {
   IBU_KOTA: {
     COURT_1: 27,
     COURT_2: 28,
@@ -108,7 +108,7 @@ const TIME_TABLE_ID: TimeTableId = {
   },
 };
 
-const COURT_STATUS = {
+export const COURT_STATUS = {
   BOOKED: "3",
   AVAILABLE: null,
   NOT_AVAILABLE: 0,
