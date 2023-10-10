@@ -14,6 +14,28 @@ type TimeTableId = {
   };
 };
 
+export type KlspefRawPayload = {
+  IDTIME: number;
+  TIMEPLAYTABLE: string;
+  IDCOURT: number;
+  NAMECOURT: string;
+  CHARGE: number | null;
+  REFERRENCENUM: number | null;
+  IDACTV: number;
+  TYPEACTV: number | null;
+  IDLOCATION: number;
+  NAMELOCATION: string;
+  USEPLAYDATE: null;
+  IDPLAYTIME: null;
+  PLAYTIME: null;
+  BOOKDATE: null;
+  BOOKTIME: null;
+  PAIDSTATUS: "";
+  STATUS: "";
+  PAIDAMOUNT: null;
+  COURTRATE: 8;
+};
+
 const LOCATIONS: readonly LOCATION[] = [
   "IBU_KOTA",
   "PUSAT_KOMUNITI_GOMBAK",
@@ -90,4 +112,5 @@ const COURT_STATUS = {
   BOOKED: "3",
   AVAILABLE: null,
   NOT_AVAILABLE: 0,
+  LOCATION_NOT_AVAILABLE: "",
 };

@@ -1,5 +1,5 @@
 import Router from "@koa/router";
-import fs from "fs";
+import { KlspefRawPayload } from "./klspef";
 
 export const router = new Router();
 
@@ -15,10 +15,15 @@ router.post("/timetable", (ctx) => {
     `"datamasa": `,
     ""
   )}]`;
+  const sanitizedPayload: KlspefRawPayload[] = JSON.parse(removedDatamasaKey);
+  const mappedPayload = sanitizedPayload.flatMap((payload) => ({
+    name: payload.NAMELOCATION,
+    timeId: payload.IDTIME,
+    locationId: payload.IDLOCATION,
+    courtId: payload.IDCOURT,
+    status: payload.STATUS,
+  }));
 
-  console.log("match", JSON.parse(removedDatamasaKey));
-
-  // const jsonText = JSON.stringify(replacedCurlyBraces);
-  // fs.writeFileSync("output.txt", jsonText);
+  console.log("match", mappedPayload);
   ctx.body = "Received with no thanks";
 });
