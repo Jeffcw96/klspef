@@ -1,15 +1,15 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import koaPinoLogger from "koa-pino-logger";
-import { router } from "./routes";
+import dotenv from "dotenv";
+import { router } from "./api";
 
-const app = new Koa();
-console.log("halo");
-app.use(
-  bodyParser({ formLimit: "10mb", jsonLimit: "10mb", textLimit: "10mb" })
-);
-app.use(koaPinoLogger());
-app.use(router.routes());
+dotenv.config();
+const app = new Koa()
+  .use(bodyParser({ formLimit: "10mb", jsonLimit: "10mb", textLimit: "10mb" }))
+  .use(koaPinoLogger())
+  .use(router.routes())
+  .use(router.allowedMethods());
 
 app.use(async (ctx) => {
   if (ctx.path === "/health") {

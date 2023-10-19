@@ -11,7 +11,8 @@ klspecResponse=()
 dates=()
 
 # Get today's date in the format YYYY-MM-DD
-today="2023/09/15"
+# today=$(date +'%Y/%m/%d')
+today="2023/10/11"
 todayDay=$(date -j -f "%Y/%m/%d" "$today" "+%A")
 
 if [ "$todayDay" != "Wednesday" ] && [ "$todayDay" != "Friday" ]; then
@@ -46,7 +47,7 @@ cleanedResponse=$(echo "$klspecResponse" | tr -d '\r\n') # Remove redundant char
 cleanedResponse=$(echo "$cleanedResponse" | tr -s ' ') # Remove redundant space
 json_data=$(jq -n -c --arg cleanedResponse "$cleanedResponse" '{"message": $cleanedResponse}')
   # Send a POST request to the specified endpoint with the response as the request body
-curl -X POST 'http://localhost:3000/timetable' \
+curl -X POST 'http://localhost:3000/klspef/timetable' \
   -H 'Content-Type: application/json' \
   -d "$json_data"
 else

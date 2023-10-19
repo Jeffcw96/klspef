@@ -1,16 +1,9 @@
-import Router from "@koa/router";
-import {
-  COURT_STATUS,
-  KlspefRawPayload,
-  LOCATION,
-  LOCATION_IDS,
-  TIME_IDS,
-  TIME_TABLE_IDS,
-} from "./klspef";
+import { Context } from "koa";
+import { config } from "src/config";
+import { KlspefRawPayload } from "src/types/klspef";
 
-export const router = new Router();
-
-router.post("/timetable", (ctx) => {
+const KLSPEF = config.KLSPEF;
+export const getTimeTable = async (ctx: Context) => {
   const wordsAndSymbolsToRemove = ["\\[", "\\]", "\\}\\}"];
   const pattern = wordsAndSymbolsToRemove.join("|");
   const cleanedMessage = (ctx.request.body as any).message.replace(
@@ -23,16 +16,17 @@ router.post("/timetable", (ctx) => {
     ""
   )}]`;
   const sanitizedPayload: KlspefRawPayload[] = JSON.parse(removedDatamasaKey);
+
   const mappedPayload = sanitizedPayload.flatMap((payload) => {
-    const location = LOCATION_IDS[payload.IDLOCATION];
-    const courtIds = TIME_TABLE_IDS[location];
+    const location = KLSPEF.LOCATION_IDS[payload.IDLOCATION];
+    const courtIds = KLSPEF.TIME_TABLE_IDS[location];
 
     if (!location) {
       return [];
     }
 
     if (
-      payload.IDTIME === TIME_IDS[location] &&
+      payload.IDTIME === KLSPEF.TIME_IDS[location] &&
       Object.values(courtIds).includes(payload.IDCOURT)
     ) {
       return {
@@ -49,9 +43,10 @@ router.post("/timetable", (ctx) => {
     return [];
   });
 
-  console.log("match", mappedPayload);
-  ctx.body = "Received with no thanks";
-});
+  console.log("mapPayload", mappedPayload);
+
+  // Call email service
+};
 
 const mapCourtLabel = (
   courtIds: {
@@ -69,7 +64,7 @@ const mapCourtLabel = (
 };
 
 const mapCourtStatusLabel = (statusId: number | string | null) => {
-  for (const [label, status] of Object.entries(COURT_STATUS)) {
+  for (const [label, status] of Object.entries(KLSPEF.COURT_STATUS)) {
     if (status === statusId) {
       return label;
     }
