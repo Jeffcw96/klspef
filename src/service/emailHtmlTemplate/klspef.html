@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KLSPEF timetable</title>
+  </head>
+  <body>
+    <div>
+      <h1>KLSPEF Timetable {{CURRENT_DATE}}</h1>
+    </div>
+    <table>
+      <tr>
+        <th>Venue</th>
+        <th>Court 1</th>
+        <th>Court 2</th>
+        <th>Court 3</th>
+      </tr>
+      <tr>
+        <td>{{VENUE_1}}</td>
+        <td>{{#if VENUE_1_COURT_1_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_1_COURT_2_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_1_COURT_3_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+      </tr>
+      <tr>
+        <td>{{VENUE_2}}</td>
+        <td>{{#if VENUE_2_COURT_1_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_2_COURT_2_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_2_COURT_3_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+      </tr>
+      <tr>
+        <td>{{VENUE_3}}</td>
+        <td>{{#if VENUE_3_COURT_1_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_3_COURT_2_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_3_COURT_3_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+      </tr>
+      <tr>
+        <td>{{VENUE_4}}</td>
+        <td>{{#if VENUE_4_COURT_1_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_4_COURT_2_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_4_COURT_3_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+      </tr>
+      <tr>
+        <td>{{VENUE_5}}</td>
+        <td>{{#if VENUE_5_COURT_1_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_5_COURT_2_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_5_COURT_3_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+      </tr>
+      <tr>
+        <td>{{VENUE_6}}</td>
+        <td>{{#if VENUE_6_COURT_1_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_6_COURT_2_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+        <td>{{#if VENUE_6_COURT_3_AVAILABILITY}} ✅ {{else}} ❌ {{/if}}</td>
+      </tr>
+    </table>
+  </body>
+</html>

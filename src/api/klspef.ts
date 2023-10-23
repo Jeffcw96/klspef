@@ -1,6 +1,8 @@
 import { Context } from "koa";
 import { config } from "src/config";
-import { KlspefRawPayload } from "src/types/klspef";
+import { klspefHtmlEmailMapper, sendEmail } from "src/service/sendEmail";
+import { KlspefMappedPayload, KlspefRawPayload } from "src/types/klspef";
+import path from "path";
 
 const KLSPEF = config.KLSPEF;
 export const getTimeTable = async (ctx: Context) => {
@@ -16,6 +18,34 @@ export const getTimeTable = async (ctx: Context) => {
     ""
   )}]`;
   const sanitizedPayload: KlspefRawPayload[] = JSON.parse(removedDatamasaKey);
+  const mappedPayload2 = sanitizedPayload.reduce(
+    (acc: KlspefMappedPayload, payload) => {
+      const location = KLSPEF.LOCATION_IDS[payload.IDLOCATION];
+      const courtIds = KLSPEF.TIME_TABLE_IDS[location];
+
+      if (
+        payload.IDTIME === KLSPEF.TIME_IDS[location] &&
+        Object.values(courtIds).includes(payload.IDCOURT)
+      ) {
+        if (!acc[payload.IDLOCATION]) {
+          acc[payload.IDLOCATION] = [];
+        }
+
+        acc[payload.IDLOCATION].push({
+          name: payload.NAMELOCATION,
+          timeId: payload.IDTIME,
+          locationId: payload.IDLOCATION,
+          courtId: payload.IDCOURT,
+          courtLabel: mapCourtLabel(courtIds, payload.IDCOURT),
+          statusId: payload.STATUS,
+          statusLabel: mapCourtStatusLabel(payload.STATUS),
+        });
+      }
+
+      return acc;
+    },
+    {}
+  );
 
   const mappedPayload = sanitizedPayload.flatMap((payload) => {
     const location = KLSPEF.LOCATION_IDS[payload.IDLOCATION];
@@ -43,9 +73,18 @@ export const getTimeTable = async (ctx: Context) => {
     return [];
   });
 
-  console.log("mapPayload", mappedPayload);
+  const html = await klspefHtmlEmailMapper(
+    path.join(__dirname, "../service/emailHtmlTemplate/klspef.html"),
+    mappedPayload2
+  );
 
-  // Call email service
+  await sendEmail({
+    mainRecipient: config.MAIN_RECIPIENT,
+    ccRecipients: config.CC_RECIPIENTS,
+    subject: "KLSPEF timetable",
+    text: "",
+    html,
+  });
 };
 
 const mapCourtLabel = (

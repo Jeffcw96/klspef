@@ -1,3 +1,5 @@
+import { config } from "../config";
+
 export type KlspefRawPayload = {
   IDTIME: number;
   TIMEPLAYTABLE: string;
@@ -19,6 +21,19 @@ export type KlspefRawPayload = {
   PAIDAMOUNT: null;
   COURTRATE: 8;
 };
+
+export type KlspefMappedPayload = Record<
+  number,
+  Array<{
+    name: string;
+    timeId: number;
+    locationId: number;
+    courtId: number;
+    courtLabel: string;
+    statusId: string;
+    statusLabel: string;
+  }>
+>;
 
 export type LOCATION =
   | "IBU_KOTA"
