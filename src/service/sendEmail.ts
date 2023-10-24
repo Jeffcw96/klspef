@@ -41,7 +41,8 @@ export const sendEmail = (emailConfig: EmailPayload) => {
 
 export const klspefHtmlEmailMapper = async (
   path: string,
-  payload: KlspefMappedPayload
+  payload: KlspefMappedPayload,
+  currentDate: string
 ) => {
   const htmlFile = await fs.readFile(path, { encoding: "utf-8" });
   const generateHtmlTemplate = handlebars.compile(htmlFile);
@@ -87,6 +88,9 @@ export const klspefHtmlEmailMapper = async (
     {}
   );
 
-  const html = generateHtmlTemplate(klspefEmailPayload);
+  const html = generateHtmlTemplate({
+    ...klspefEmailPayload,
+    CURRENT_DATE: currentDate,
+  });
   return html;
 };

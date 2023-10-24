@@ -3,6 +3,8 @@ import { config } from "src/config";
 import { klspefHtmlEmailMapper, sendEmail } from "src/service/sendEmail";
 import { KlspefMappedPayload, KlspefRawPayload } from "src/types/klspef";
 import path from "path";
+import { klspefLogger } from "src/utils/logger";
+import { formatDate } from "src/utils/date";
 
 const KLSPEF = config.KLSPEF;
 export const getTimeTable = async (ctx: Context) => {
@@ -18,7 +20,7 @@ export const getTimeTable = async (ctx: Context) => {
     ""
   )}]`;
   const sanitizedPayload: KlspefRawPayload[] = JSON.parse(removedDatamasaKey);
-  const mappedPayload2 = sanitizedPayload.reduce(
+  const mappedPayload = sanitizedPayload.reduce(
     (acc: KlspefMappedPayload, payload) => {
       const location = KLSPEF.LOCATION_IDS[payload.IDLOCATION];
       const courtIds = KLSPEF.TIME_TABLE_IDS[location];
@@ -47,35 +49,13 @@ export const getTimeTable = async (ctx: Context) => {
     {}
   );
 
-  const mappedPayload = sanitizedPayload.flatMap((payload) => {
-    const location = KLSPEF.LOCATION_IDS[payload.IDLOCATION];
-    const courtIds = KLSPEF.TIME_TABLE_IDS[location];
-
-    if (!location) {
-      return [];
-    }
-
-    if (
-      payload.IDTIME === KLSPEF.TIME_IDS[location] &&
-      Object.values(courtIds).includes(payload.IDCOURT)
-    ) {
-      return {
-        name: payload.NAMELOCATION,
-        timeId: payload.IDTIME,
-        locationId: payload.IDLOCATION,
-        courtId: payload.IDCOURT,
-        courtLabel: mapCourtLabel(courtIds, payload.IDCOURT),
-        statusId: payload.STATUS,
-        statusLabel: mapCourtStatusLabel(payload.STATUS),
-      };
-    }
-
-    return [];
-  });
+  const date = new Date();
+  const { todayDate, todayDay } = formatDate(date);
 
   const html = await klspefHtmlEmailMapper(
     path.join(__dirname, "../service/emailHtmlTemplate/klspef.html"),
-    mappedPayload2
+    mappedPayload,
+    `${todayDate} | ${todayDay}`
   );
 
   await sendEmail({
@@ -85,6 +65,15 @@ export const getTimeTable = async (ctx: Context) => {
     text: "",
     html,
   });
+
+  klspefLogger.info(
+    {
+      message: "KLSPEF Email sent successfully",
+      date: todayDate,
+      day: todayDay,
+    },
+    "KLSPEF Email sent successfully"
+  );
 };
 
 const mapCourtLabel = (

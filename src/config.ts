@@ -19,7 +19,7 @@ export const config: Config = {
     PASSWORD: process.env.GMAIL_APP_PASSWORD,
   },
   MAIN_RECIPIENT: "jeffdevslife@gmail.com",
-  CC_RECIPIENTS: ["changcheewah96@gmail.com"],
+  CC_RECIPIENTS: [],
   KLSPEF: {
     LOCATIONS: [
       "IBU_KOTA",
