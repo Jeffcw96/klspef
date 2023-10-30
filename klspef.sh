@@ -47,7 +47,7 @@ cleanedResponse=$(echo "$klspecResponse" | tr -d '\r\n') # Remove redundant char
 cleanedResponse=$(echo "$cleanedResponse" | tr -s ' ') # Remove redundant space
 json_data=$(jq -n -c --arg cleanedResponse "$cleanedResponse" '{"message": $cleanedResponse}')
   # Send a POST request to the specified endpoint with the response as the request body
-curl -X POST 'https://klspef-timetable-crawler.onrender.com/klspef/timetable' \
+curl -X POST 'http://localhost:3000/klspef/timetable' \
   -H 'Content-Type: application/json' \
   -d "$json_data"
 else

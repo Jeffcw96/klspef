@@ -1,4 +1,7 @@
-# Funtionality
+## TO DO
+
+- Package the code into docker container and run locally
+- Setup cron job
 
 ## CRON JOB KLSPEF service
 
