@@ -14,7 +14,6 @@ export const getTimeTable = async (ctx: Context) => {
     new RegExp(pattern, "g"),
     ""
   );
-  console.log(`cleanedMessage`, cleanedMessage);
   const replacedCurlyBraces = cleanedMessage.replaceAll("} }", "}");
   const removedDatamasaKey = `[${replacedCurlyBraces.replaceAll(
     `"datamasa": `,
@@ -49,6 +48,8 @@ export const getTimeTable = async (ctx: Context) => {
     },
     {}
   );
+
+  console.log("mappedPayload", mappedPayload);
 
   const date = new Date();
   const { todayDate, todayDay } = formatDate(date);
