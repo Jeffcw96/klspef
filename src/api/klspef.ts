@@ -14,6 +14,7 @@ export const getTimeTable = async (ctx: Context) => {
     new RegExp(pattern, "g"),
     ""
   );
+  console.log(`cleanedMessage`, cleanedMessage);
   const replacedCurlyBraces = cleanedMessage.replaceAll("} }", "}");
   const removedDatamasaKey = `[${replacedCurlyBraces.replaceAll(
     `"datamasa": `,
