@@ -1,61 +1,47 @@
-import { Context } from "koa";
-import { config } from "src/config";
-import { klspefHtmlEmailMapper, sendEmail } from "src/service/sendEmail";
-import { KlspefMappedPayload, KlspefRawPayload } from "src/types/klspef";
-import path from "path";
-import { klspefLogger } from "src/utils/logger";
-import { formatDate } from "src/utils/date";
+import { Context } from 'koa';
+import { config } from 'src/config';
+import { klspefHtmlEmailMapper, sendEmail } from 'src/service/sendEmail';
+import { KlspefMappedPayload, KlspefRawPayload } from 'src/types/klspef';
+import path from 'path';
+import { klspefLogger } from 'src/utils/logger';
+import { formatDate } from 'src/utils/date';
 
 const KLSPEF = config.KLSPEF;
 export const getTimeTable = async (ctx: Context) => {
-  const wordsAndSymbolsToRemove = ["\\[", "\\]", "\\}\\}"];
-  const pattern = wordsAndSymbolsToRemove.join("|");
-  const cleanedMessage = (ctx.request.body as any).message.replace(
-    new RegExp(pattern, "g"),
-    ""
-  );
-  const replacedCurlyBraces = cleanedMessage.replaceAll("} }", "}");
-  const removedDatamasaKey = `[${replacedCurlyBraces.replaceAll(
-    `"datamasa": `,
-    ""
-  )}]`;
+  const wordsAndSymbolsToRemove = ['\\[', '\\]', '\\}\\}'];
+  const pattern = wordsAndSymbolsToRemove.join('|');
+  const cleanedMessage = (ctx.request.body as any).message.replace(new RegExp(pattern, 'g'), '');
+  const replacedCurlyBraces = cleanedMessage.replaceAll('} }', '}');
+  const removedDatamasaKey = `[${replacedCurlyBraces.replaceAll(`"datamasa": `, '')}]`;
   const sanitizedPayload: KlspefRawPayload[] = JSON.parse(removedDatamasaKey);
-  const mappedPayload = sanitizedPayload.reduce(
-    (acc: KlspefMappedPayload, payload) => {
-      const location = KLSPEF.LOCATION_IDS[payload.IDLOCATION];
-      const courtIds = KLSPEF.TIME_TABLE_IDS[location];
+  const mappedPayload = sanitizedPayload.reduce((acc: KlspefMappedPayload, payload) => {
+    const location = KLSPEF.LOCATION_IDS[payload.IDLOCATION];
+    const courtIds = KLSPEF.TIME_TABLE_IDS[location];
 
-      if (
-        payload.IDTIME === KLSPEF.TIME_IDS[location] &&
-        Object.values(courtIds).includes(payload.IDCOURT)
-      ) {
-        if (!acc[payload.IDLOCATION]) {
-          acc[payload.IDLOCATION] = [];
-        }
-
-        acc[payload.IDLOCATION].push({
-          name: payload.NAMELOCATION,
-          timeId: payload.IDTIME,
-          locationId: payload.IDLOCATION,
-          courtId: payload.IDCOURT,
-          courtLabel: mapCourtLabel(courtIds, payload.IDCOURT),
-          statusId: payload.STATUS,
-          statusLabel: mapCourtStatusLabel(payload.STATUS),
-        });
+    if (payload.IDTIME === KLSPEF.TIME_IDS[location] && Object.values(courtIds).includes(payload.IDCOURT)) {
+      if (!acc[payload.IDLOCATION]) {
+        acc[payload.IDLOCATION] = [];
       }
 
-      return acc;
-    },
-    {}
-  );
+      acc[payload.IDLOCATION].push({
+        name: payload.NAMELOCATION,
+        timeId: payload.IDTIME,
+        locationId: payload.IDLOCATION,
+        courtId: payload.IDCOURT,
+        courtLabel: mapCourtLabel(courtIds, payload.IDCOURT),
+        statusId: payload.STATUS,
+        statusLabel: mapCourtStatusLabel(payload.STATUS),
+      });
+    }
 
-  console.log("mappedPayload", mappedPayload);
+    return acc;
+  }, {});
 
   const date = new Date();
   const { todayDate, todayDay } = formatDate(date);
 
   const html = await klspefHtmlEmailMapper(
-    path.join(__dirname, "../service/emailHtmlTemplate/klspef.html"),
+    path.join(__dirname, '../service/emailHtmlTemplate/klspef.html'),
     mappedPayload,
     `${todayDate} | ${todayDay}`
   );
@@ -63,18 +49,18 @@ export const getTimeTable = async (ctx: Context) => {
   await sendEmail({
     mainRecipient: config.MAIN_RECIPIENT,
     ccRecipients: config.CC_RECIPIENTS,
-    subject: "KLSPEF timetable",
-    text: "",
+    subject: 'KLSPEF timetable',
+    text: '',
     html,
   });
 
   klspefLogger.info(
     {
-      message: "KLSPEF Email sent successfully",
+      message: 'KLSPEF Email sent successfully',
       date: todayDate,
       day: todayDay,
     },
-    "KLSPEF Email sent successfully"
+    'KLSPEF Email sent successfully'
   );
 };
 
