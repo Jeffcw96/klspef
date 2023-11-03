@@ -11,26 +11,29 @@ klspecResponse=()
 dates=()
 
 # Get today's date in the format YYYY-MM-DD
-# today=$(date +'%Y/%m/%d')
-today="2023/10/11"
-todayDay=$(date -j -f "%Y/%m/%d" "$today" "+%A")
+today=$(date +'%m/%d/%Y')
+# today="2023/11/02"
+todayDay=$(date -j -f "%m/%d/%Y" "$today" "+%A")
 
-if [ "$todayDay" != "Wednesday" ] && [ "$todayDay" != "Friday" ]; then
-  echo "Not matching Wednesday or Friday"
-  exit 1
-fi
+# if [ "$todayDay" != "Wednesday" ] && [ "$todayDay" != "Friday" ]; then
+#   echo Not matching Wednesday or Friday >> output.txt
+#   exit 1
+# fi
 
 # IMPORTANT: For window, we might need to change the following code to:
 # KLSPEF only can book up to maximum 21 days
-maxDay=$(date -j -f "%Y/%m/%d" -v "+21d" "$today" "+%Y/%m/%d")
+maxDay=$(date -j -f "%m/%d/%Y" -v "+21d" "$today" "+%m/%d/%Y")
 # Replace all '/' with '%2F'
 encodedMaxDate="${maxDay//\//%2F}"
+
+echo MaxDay ${maxDay} ${encodedMaxDate} >> output.txt
 
 for ((i = 0; i < ${#LOCATION_ID[@]}; i++)); do
   id="${LOCATION_ID[i]}"
   label="${LOCATION_LABEL[i]}"
   sleep 1
   timeTableResponse=$(curl "https://appsys.dbkl.gov.my/mytempahan_baru/gateway.asp?actiontype=gettimetable&dateplay=${encodedMaxDate}&actvid=1&locid=${LOCATION_ID[i]}")
+  echo ${timeTableResponse} >> output.txt
   processedResponse="${timeTableResponse:2:${#timeTableResponse}-3}"
 
    # Check if it's the last iteration
@@ -46,6 +49,7 @@ if [ -n "klspecResponse" ]; then
 cleanedResponse=$(echo "$klspecResponse" | tr -d '\r\n') # Remove redundant character
 cleanedResponse=$(echo "$cleanedResponse" | tr -s ' ') # Remove redundant space
 json_data=$(jq -n -c --arg cleanedResponse "$cleanedResponse" '{"message": $cleanedResponse}')
+
   # Send a POST request to the specified endpoint with the response as the request body
 curl -X POST 'http://localhost:3000/klspef/timetable' \
   -H 'Content-Type: application/json' \

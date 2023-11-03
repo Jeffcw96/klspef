@@ -14,6 +14,7 @@ export const getTimeTable = async (ctx: Context) => {
   const replacedCurlyBraces = cleanedMessage.replaceAll('} }', '}');
   const removedDatamasaKey = `[${replacedCurlyBraces.replaceAll(`"datamasa": `, '')}]`;
   const sanitizedPayload: KlspefRawPayload[] = JSON.parse(removedDatamasaKey);
+
   const mappedPayload = sanitizedPayload.reduce((acc: KlspefMappedPayload, payload) => {
     const location = KLSPEF.LOCATION_IDS[payload.IDLOCATION];
     const courtIds = KLSPEF.TIME_TABLE_IDS[location];
@@ -22,7 +23,6 @@ export const getTimeTable = async (ctx: Context) => {
       if (!acc[payload.IDLOCATION]) {
         acc[payload.IDLOCATION] = [];
       }
-
       acc[payload.IDLOCATION].push({
         name: payload.NAMELOCATION,
         timeId: payload.IDTIME,
@@ -38,7 +38,8 @@ export const getTimeTable = async (ctx: Context) => {
   }, {});
 
   const date = new Date();
-  const { todayDate, todayDay } = formatDate(date);
+  const dateAfterThreeWeeks = new Date(date.setDate(date.getDate() + 21));
+  const { todayDate, todayDay } = formatDate(dateAfterThreeWeeks);
 
   const html = await klspefHtmlEmailMapper(
     path.join(__dirname, '../service/emailHtmlTemplate/klspef.html'),

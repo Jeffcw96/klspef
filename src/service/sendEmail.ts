@@ -47,7 +47,7 @@ export const klspefHtmlEmailMapper = async (path: string, payload: KlspefMappedP
     const venue = payload[locationId][0].name;
     const { courtOneAvailability, courtTwoAvailability, courtThreeAvailability } = payload[locationId].reduce(
       (acc, val) => {
-        const isCourtAvailable = val.statusLabel === 'AVAILABLE';
+        const isCourtAvailable = val.statusLabel === 'AVAILABLE_LABEL_1' || val.statusLabel === 'AVAILABLE_LABEL_2';
         switch (val.courtLabel) {
           case 'COURT_1':
             return {
@@ -70,7 +70,6 @@ export const klspefHtmlEmailMapper = async (path: string, payload: KlspefMappedP
       },
       {} as any
     );
-
     return {
       ...accEmailPayload,
       [`VENUE_${ind}`]: venue,
