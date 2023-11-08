@@ -19,22 +19,23 @@ export const getTimeTable = async (ctx: Context) => {
     const location = KLSPEF.LOCATION_IDS[payload.IDLOCATION];
     const courtIds = KLSPEF.TIME_TABLE_IDS[location];
 
-    if (payload.IDTIME === KLSPEF.TIME_IDS[location] && Object.values(courtIds).includes(payload.IDCOURT)) {
-      if (!acc[payload.IDLOCATION]) {
-        acc[payload.IDLOCATION] = [];
-      }
-      acc[payload.IDLOCATION].push({
-        name: payload.NAMELOCATION,
-        timeId: payload.IDTIME,
-        locationId: payload.IDLOCATION,
-        courtId: payload.IDCOURT,
-        courtLabel: mapCourtLabel(courtIds, payload.IDCOURT),
-        statusId: payload.STATUS,
-        statusLabel: mapCourtStatusLabel(payload.STATUS),
-      });
-    }
-
-    return acc;
+    return payload.IDTIME === KLSPEF.TIME_IDS[location] && Object.values(courtIds).includes(payload.IDCOURT)
+      ? {
+          ...acc,
+          [payload.IDLOCATION]: [
+            ...(acc[payload.IDLOCATION] || []),
+            {
+              name: payload.NAMELOCATION,
+              timeId: payload.IDTIME,
+              locationId: payload.IDLOCATION,
+              courtId: payload.IDCOURT,
+              courtLabel: mapCourtLabel(courtIds, payload.IDCOURT),
+              statusId: payload.STATUS,
+              statusLabel: mapCourtStatusLabel(payload.STATUS),
+            },
+          ],
+        }
+      : acc;
   }, {});
 
   const date = new Date();
