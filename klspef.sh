@@ -2,8 +2,8 @@
 # Use curl to send the HTTP request and assign the response to a variable
 
 echo Starting script... >> output.txt
-LOCATION_ID=(4 17 19 57 62 75)
-LOCATION_LABEL=("IBU_KOTA" "PUSAT_KOMUNITI_GOMBAK" "TAMAN_MELATI_IMPIAN" "DESA_REJANG" "AIR_PANAS" "SEMARAK")
+LOCATION_ID=(4 17 19 57 62 75 80)
+LOCATION_LABEL=("IBU_KOTA" "PUSAT_KOMUNITI_GOMBAK" "TAMAN_MELATI_IMPIAN" "DESA_REJANG" "AIR_PANAS" "SEMARAK" "PPR_AIR_PANAS")
 klspecResponse=()
 
 # Initialize an empty array to store every Wednesday & Friday date up to next 21 days

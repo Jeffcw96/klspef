@@ -1,4 +1,4 @@
-import { config } from '../config';
+import { config } from "../config";
 
 export type KlspefRawPayload = {
   IDTIME: number;
@@ -16,8 +16,8 @@ export type KlspefRawPayload = {
   PLAYTIME: null;
   BOOKDATE: null;
   BOOKTIME: null;
-  PAIDSTATUS: '';
-  STATUS: '';
+  PAIDSTATUS: "";
+  STATUS: "";
   PAIDAMOUNT: null;
   COURTRATE: 8;
 };
@@ -36,12 +36,13 @@ export type KlspefMappedPayload = Record<
 >;
 
 export type LOCATION =
-  | 'IBU_KOTA'
-  | 'PUSAT_KOMUNITI_GOMBAK'
-  | 'TAMAN_MELATI_IMPIAN'
-  | 'DESA_REJANG'
-  | 'AIR_PANAS'
-  | 'SEMARAK';
+  | "IBU_KOTA"
+  | "PUSAT_KOMUNITI_GOMBAK"
+  | "TAMAN_MELATI_IMPIAN"
+  | "DESA_REJANG"
+  | "AIR_PANAS"
+  | "SEMARAK"
+  | "PPR_AIR_PANAS";
 
 export type TimeTableId = {
   [key in LOCATION]: {
@@ -52,8 +53,8 @@ export type TimeTableId = {
 };
 
 export type CourtStatus = {
-  BOOKED: '3';
-  AVAILABLE_LABEL_1: '';
+  BOOKED: "3";
+  AVAILABLE_LABEL_1: "";
   AVAILABLE_LABEL_2: null;
   NOT_AVAILABLE: 0;
 };

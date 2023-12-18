@@ -1,4 +1,4 @@
-import { CourtStatus, LOCATION, TimeTableId } from './types/klspef';
+import { CourtStatus, LOCATION, TimeTableId } from "./types/klspef";
 
 type Config = {
   EMAIL_AUTH: { USER: string; PASSWORD: string };
@@ -15,20 +15,29 @@ type Config = {
 
 export const config: Config = {
   EMAIL_AUTH: {
-    USER: 'jeffdevslife@gmail.com',
+    USER: "jeffdevslife@gmail.com",
     PASSWORD: process.env.GMAIL_APP_PASSWORD,
   },
-  MAIN_RECIPIENT: 'jeffdevslife@gmail.com',
-  CC_RECIPIENTS: ['jasonyeep97@gmail.com'],
+  MAIN_RECIPIENT: "jeffdevslife@gmail.com",
+  CC_RECIPIENTS: ["jasonyeep97@gmail.com"],
   KLSPEF: {
-    LOCATIONS: ['IBU_KOTA', 'PUSAT_KOMUNITI_GOMBAK', 'TAMAN_MELATI_IMPIAN', 'DESA_REJANG', 'AIR_PANAS', 'SEMARAK'],
+    LOCATIONS: [
+      "IBU_KOTA",
+      "PUSAT_KOMUNITI_GOMBAK",
+      "TAMAN_MELATI_IMPIAN",
+      "DESA_REJANG",
+      "AIR_PANAS",
+      "SEMARAK",
+      "PPR_AIR_PANAS",
+    ],
     LOCATION_IDS: {
-      4: 'IBU_KOTA',
-      17: 'PUSAT_KOMUNITI_GOMBAK',
-      19: 'TAMAN_MELATI_IMPIAN',
-      57: 'DESA_REJANG',
-      62: 'AIR_PANAS',
-      75: 'SEMARAK',
+      4: "IBU_KOTA",
+      17: "PUSAT_KOMUNITI_GOMBAK",
+      19: "TAMAN_MELATI_IMPIAN",
+      57: "DESA_REJANG",
+      62: "AIR_PANAS",
+      75: "SEMARAK",
+      80: "PPR_AIR_PANAS",
     },
     TIME_IDS: {
       IBU_KOTA: 97,
@@ -37,6 +46,7 @@ export const config: Config = {
       DESA_REJANG: 2009,
       AIR_PANAS: 2269,
       SEMARAK: 2714,
+      PPR_AIR_PANAS: 2827,
     },
     TIME_TABLE_IDS: {
       IBU_KOTA: {
@@ -69,11 +79,16 @@ export const config: Config = {
         COURT_2: 359,
         COURT_3: 360,
       },
+      PPR_AIR_PANAS: {
+        COURT_1: 374,
+        COURT_2: 383,
+        COURT_3: 384,
+      },
     },
     COURT_STATUS: {
-      BOOKED: '3',
+      BOOKED: "3",
       NOT_AVAILABLE: 0,
-      AVAILABLE_LABEL_1: '',
+      AVAILABLE_LABEL_1: "",
       AVAILABLE_LABEL_2: null,
     },
   },
